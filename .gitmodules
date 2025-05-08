@@ -1,3 +1,6 @@
 [submodule "vox_box/third_party/CosyVoice"]
 	path = vox_box/third_party/CosyVoice
 	url = https://github.com/FunAudioLLM/CosyVoice/
+[submodule "vox_box/third_party/dia"]
+	path = vox_box/third_party/dia
+	url = https://github.com/nari-labs/dia.git

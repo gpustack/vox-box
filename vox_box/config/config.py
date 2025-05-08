@@ -31,6 +31,7 @@ class Config:
 class BackendEnum(str, Enum):
     BARK = "Bark"
     COSY_VOICE = "CosyVoice"
+    DIA = "Dia"
     FASTER_WHISPER = "FasterWhisper"
     FUN_ASR = "FunASR"
 

@@ -1,13 +1,13 @@
 # Vox Box
 
-A text-to-speech and speech-to-text server compatible with the OpenAI API, powered by backend support from Whisper, FunASR, Bark, and CosyVoice.
+A text-to-speech and speech-to-text server compatible with the OpenAI API, powered by backend support from Whisper, FunASR, Bark, Dia and CosyVoice.
 
 ## Requirements
 
 - Python 3.10 or greater
 - Support Nvidia GPU, requires the following NVIDIA libraries to be installed:
   - [cuBLAS for CUDA 12](https://developer.nvidia.com/cublas)
-  - [cuDNN 9 for CUDA 12](https://developer.nvidia.com/cudnn)  
+  - [cuDNN 9 for CUDA 12](https://developer.nvidia.com/cudnn)
 
 ## Installation
 
@@ -34,6 +34,7 @@ vox-box start --huggingface-repo-id Systran/faster-whisper-small --data-dir C:\U
 ```
 
 ### Options
+
 - -d, --debug: Enable debug mode.
 - --host: Host to bind the server to. Default is 0.0.0.0.
 - --port: Port to bind the server to. Default is 80.
@@ -71,16 +72,18 @@ vox-box start --huggingface-repo-id Systran/faster-whisper-small --data-dir C:\U
 | CosyVoice-300M-SFT              | text-to-speech | [Hugging Face](https://huggingface.co/FunAudioLLM/CosyVoice-300M-SFT), [ModelScope](https://modelscope.cn/models/iic/CosyVoice-300M-SFT)                                                    | Linux(ARM not supported) &#9989;, Windows(Not supported), macOS &#9989; |
 | CosyVoice-300M                  | text-to-speech | [Hugging Face](https://huggingface.co/FunAudioLLM/CosyVoice-300M), [ModelScope](https://modelscope.cn/models/iic/CosyVoice-300M)                                                            | Linux(ARM not supported) &#9989;, Windows(Not supported), macOS &#9989; |
 | CosyVoice-300M-25Hz             | text-to-speech | [ModelScope](https://modelscope.cn/models/iic/CosyVoice-300M-25Hz)                                                                                                                          | Linux(ARM not supported) &#9989;, Windows(Not supported), macOS &#9989; |
+| Dia-1.6B                        | text-to-speech | [Hugging Face](https://huggingface.co/nari-labs/Dia-1.6B), [ModelScope](https://modelscope.cn/models/nari-labs/Dia-1.6B)                                                                    | Linux(ARM not supported) &#9989;, Windows(Not supported), macOS &#9989; |
 
 ## Supported APIs
 
-### Create speech 
+### Create speech
 
 **Endpoint**: `POST /v1/audio/speech`
 
 Generates audio from the input text. Compatible with the [OpenAI audio/speech API](https://platform.openai.com/docs/api-reference/audio/createSpeech).
 
 **Example Request**:
+
 ```bash
 curl http://localhost/v1/audio/speech \
   -H "Authorization: Bearer $OPENAI_API_KEY" \
@@ -96,13 +99,14 @@ curl http://localhost/v1/audio/speech \
 **Response**:
 The audio file content.
 
-### Create transcription 
+### Create transcription
 
 **Endpoint**: `POST /v1/audio/transcriptions`
 
 Transcribes audio into the input language. Compatible with the [OpenAI audio/transcription API](https://platform.openai.com/docs/api-reference/audio/createTranscription).
 
 **Example Request**:
+
 ```bash
 curl https://localhost/v1/audio/transcriptions \
   -H "Authorization: Bearer $OPENAI_API_KEY" \
@@ -112,6 +116,7 @@ curl https://localhost/v1/audio/transcriptions \
 ```
 
 **Response**:
+
 ```json
 {
   "text": "Hello world."
