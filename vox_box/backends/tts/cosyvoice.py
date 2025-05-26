@@ -45,12 +45,26 @@ class CosyVoice(TTSBackend):
         self._model_dict = {}
         self._is_cosyvoice_v2 = False
 
+        self._parse_and_set_cuda_visible_devices()
+
         cosyvoice_yaml_path = os.path.join(self._cfg.model, "cosyvoice.yaml")
         if os.path.exists(cosyvoice_yaml_path):
             with open(cosyvoice_yaml_path, "r", encoding="utf-8") as f:
                 content = f.read()
                 if re.search(r"Qwen2", content, re.IGNORECASE):
                     self._is_cosyvoice_v2 = True
+
+    def _parse_and_set_cuda_visible_devices(self):
+        """
+        Parse CUDA device in format cuda:1 and set CUDA_VISIBLE_DEVICES accordingly.
+        """
+        device = self._cfg.device
+        if device.startswith("cuda:"):
+            device_index = device.split(":")[1]
+            if device_index.isdigit():
+                os.environ["CUDA_VISIBLE_DEVICES"] = device_index
+            else:
+                raise ValueError(f"Invalid CUDA device index: {device_index}")
 
     def load(self):
         for path in paths_to_insert:
@@ -66,9 +80,7 @@ class CosyVoice(TTSBackend):
 
             # CosyVoice2 does not have builtin spk2info.pt
             if not self._model.frontend.spk2info:
-                self._model.frontend.spk2info = torch.load(
-                    builtin_spk2info_path, map_location=self._cfg.device
-                )
+                self._model.frontend.spk2info = torch.load(builtin_spk2info_path)
         else:
             from cosyvoice.cli.cosyvoice import CosyVoice as CosyVoiceModel
 
