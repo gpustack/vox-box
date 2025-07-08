@@ -28,6 +28,7 @@ class FasterWhisper(STTBackend):
         preprocessor_config_path = os.path.join(
             self._cfg.model, "preprocessor_config.json"
         )
+
         if os.path.exists(preprocessor_config_path):
             with open(preprocessor_config_path, "r", encoding="utf-8") as f:
                 self._preprocessor_config_json = json.load(f)
@@ -40,22 +41,17 @@ class FasterWhisper(STTBackend):
         if self._cfg.device == "cpu":
             cpu_threads = 8
 
+        device = self._cfg.device
+        if device.startswith("cuda:"):
+            device = device.split(":")[0]
+
         compute_type = "default"
         if platform.system() == "Darwin":
             compute_type = "int8"
 
-        device = self._cfg.device
-        device_index = 0
-        if self._cfg.device != "cpu":
-            arr = device.split(":")
-            device = arr[0]
-            if len(arr) > 1:
-                device_index = int(arr[1])
-
         self._model = WhisperModel(
             self._cfg.model,
             device=device,
-            device_index=device_index,
             cpu_threads=cpu_threads,
             compute_type=compute_type,
         )
