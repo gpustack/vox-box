@@ -7,7 +7,7 @@ from vox_box.logging import setup_logging
 from vox_box.config import Config
 from vox_box.server.model import ModelInstance
 from vox_box.server.server import Server
-from vox_box.utils.model import parse_and_set_cuda_visible_devices
+from vox_box.utils.model import preconfigure_faster_whisper_env
 
 
 logger = logging.getLogger(__name__)
@@ -92,7 +92,7 @@ def run(args: argparse.Namespace):
     try:
         cfg = parse_args(args)
         setup_logging(cfg.debug)
-        parse_and_set_cuda_visible_devices(cfg)
+        preconfigure_faster_whisper_env(cfg)
 
         logger.info("Starting with arguments: %s", args._get_kwargs())
 
