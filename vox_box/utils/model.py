@@ -41,8 +41,10 @@ def preconfigure_faster_whisper_env(cfg: Config):
         return
 
     # If unset is_faster_whisper, check if the model name contains "faster-whisper"
-    if is_faster_whisper is None and re.search(
-        r"faster.*whisper", cfg.model, re.IGNORECASE
+    if (
+        is_faster_whisper is None
+        and isinstance(cfg.model, str)
+        and re.search(r"faster.*whisper", cfg.model, re.IGNORECASE)
     ):
         is_faster_whisper = True
 
