@@ -1,5 +1,6 @@
 import asyncio
 import functools
+import mimetypes
 from fastapi import APIRouter, HTTPException, Request, UploadFile
 from pydantic import BaseModel
 from fastapi.responses import FileResponse
@@ -120,7 +121,7 @@ async def transcribe(request: Request):
         file: UploadFile = form[
             "file"
         ]  # flac, mp3, mp4, mpeg, mpga, m4a, ogg, wav, or webm
-        file_content_type = file.content_type
+        file_content_type = file.content_type or mimetypes.guess_type(file.filename)[0]
         if file_content_type not in ALLOWED_TRANSCRIPTIONS_INPUT_AUDIO_FORMATS:
             return HTTPException(
                 status_code=400,
