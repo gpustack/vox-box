@@ -45,7 +45,7 @@ class ModelInstance:
                 )
                 self._cfg.model = mode_path
             except Exception as e:
-                raise Exception(f"Faild to download model, {e}")
+                raise Exception(f"Failed to download model, {e}")
 
         backend_framework_name = self._estimate.get("backend_framework")
         if backend_framework_name == BackendEnum.FASTER_WHISPER:
@@ -67,7 +67,7 @@ class ModelInstance:
                 logger.info("Loading model")
                 _instance = self._backend_framework.load()
             except Exception as e:
-                raise Exception(f"Faild to load model, {e}")
+                raise Exception(f"Failed to load model, {e}")
         return _instance
 
 
