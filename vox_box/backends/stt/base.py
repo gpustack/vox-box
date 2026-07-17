@@ -34,3 +34,16 @@ class STTBackend(ABC):
         **kwargs
     ):
         pass
+
+    def is_stream_supported(self) -> bool:
+        return False
+
+    def transcribe_stream(
+        self,
+        audio: bytes,
+        language: Optional[str] = None,
+        prompt: Optional[str] = None,
+        temperature: float = 0.2,
+        **kwargs
+    ):
+        raise NotImplementedError("Streaming is not supported for this backend")

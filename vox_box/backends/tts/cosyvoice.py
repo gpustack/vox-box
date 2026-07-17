@@ -134,6 +134,29 @@ class CosyVoice(TTSBackend):
                 output_file_path = convert(wav_file_path, reponse_format, speed)
                 return output_file_path
 
+    def is_stream_supported(self) -> bool:
+        return True
+
+    def speech_stream(
+        self,
+        input: str,
+        voice: Optional[str] = None,
+        speed: float = 1,
+        **kwargs,
+    ):
+        if voice not in self._voices:
+            raise ValueError(f"Voice {voice} not supported")
+
+        original_voice = self._get_original_voice(voice)
+        model_output = self._model.inference_sft(
+            input, original_voice, stream=True, speed=speed
+        )
+        for chunk in model_output:
+            tts_audio = (
+                (chunk["tts_speech"].numpy() * (2**15)).astype(np.int16).tobytes()
+            )
+            yield tts_audio
+
     def _get_voices(self) -> List[str]:
         voices = self._model.list_available_spks()
         return [self.language_map.get(voice, voice) for voice in voices]

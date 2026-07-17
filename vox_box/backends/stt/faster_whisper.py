@@ -142,6 +142,34 @@ class FasterWhisper(STTBackend):
 
         return response
 
+    def is_stream_supported(self) -> bool:
+        return True
+
+    def transcribe_stream(
+        self,
+        audio: bytes,
+        language: Optional[str] = None,
+        prompt: Optional[str] = None,
+        temperature: Optional[float] = 0.2,
+        **kwargs,
+    ):
+        if language == "auto":
+            language = None
+
+        audio_data = io.BytesIO(audio)
+        segs, info = self._model.transcribe(
+            audio_data,
+            language=language,
+            initial_prompt=prompt,
+            temperature=temperature,
+            without_timestamps=True,
+        )
+
+        for seg in segs:
+            text = seg.text.strip()
+            if text:
+                yield json.dumps({"text": text})
+
     def _get_languages(self) -> List[Dict]:
         return [
             {"auto": "auto"},

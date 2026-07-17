@@ -36,3 +36,11 @@ class TTSBackend(ABC):
         **kwargs
     ):
         pass
+
+    def is_stream_supported(self) -> bool:
+        return False
+
+    def speech_stream(
+        self, input: str, voice: Optional[str], speed: float = 1, **kwargs
+    ):
+        raise NotImplementedError("Streaming is not supported for this backend")
